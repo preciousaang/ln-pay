@@ -4,7 +4,7 @@
   "description": "Payment service for Lannister Tech",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --exit",
     "test:watch": "mocha --watch"
   },
   "author": "Precious Ibeagi",
