@@ -5,12 +5,18 @@ let chai = require("chai");
 let server = require("../index");
 let chaiHttp = require("chai-http");
 const { expect } = require("chai");
+const Fee = require("../models/fees.model");
 
 let should = chai.should();
 
 chai.use(chaiHttp);
 
 describe("/POST Fees", function () {
+  after((done) => {
+    Fee.deleteMany({}, function () {
+      done();
+    });
+  });
   it("It should post the fees", function (done) {
     chai
       .request(server)
