@@ -1,6 +1,7 @@
 require("dotenv").config();
-let express = require("express");
-let app = express();
+const express = require("express");
+const app = express();
+const PORT = process.env.PORT || 3000;
 require("./config/db");
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -12,8 +13,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.listen(3000, () => {
-  console.log("App listening on post 3000");
+app.listen(PORT, () => {
+  console.log(`App listening on post ${PORT}`);
 });
 
 module.exports = app;

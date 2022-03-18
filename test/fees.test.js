@@ -1,4 +1,6 @@
 process.env.NODE_ENV = "test";
+process.env.PORT = 3001;
+process.env.DB_URL = "mongodb://localhost:27017/lannister-pay-test";
 let chai = require("chai");
 let server = require("../index");
 let chaiHttp = require("chai-http");
@@ -15,7 +17,7 @@ describe("/POST Fees", function () {
       .post("/fees")
       .send({
         FeeConfigurationSpec:
-          "LNPY1221 NGN * *(*) : APPLY PERC 1.4\nLNPY1222 NGN INTL CREDIT-CARD(VISA) : APPLY PERC 5.0\nLNPY1223 NGN LOCL CREDIT-CARD(*) : APPLY FLAT_PERC 50:1.4\nLNPY1224 NGN * BANK-ACCOUNT(*) : APPLY FLAT 100\nLNPY1225 NGN * USSD(MTN) : APPLY PERC 0.55",
+          "LNPY1221 NGN * *(*) : APPLY PERC 1.4\\nLNPY1222 NGN INTL CREDIT-CARD(VISA) : APPLY PERC 5.0\\nLNPY1223 NGN LOCL CREDIT-CARD(*) : APPLY FLAT_PERC 50:1.4\\nLNPY1224 NGN * BANK-ACCOUNT(*) : APPLY FLAT 100\\nLNPY1225 NGN * USSD(MTN) : APPLY PERC 0.55",
       })
       .end((err, res) => {
         should.not.exist(err);
@@ -23,7 +25,6 @@ describe("/POST Fees", function () {
         res.body.should.be.a("object");
         res.body.should.have.property("status");
         res.body.should.have.property("status").eql("ok");
-
         done();
       });
   });

@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const feeSchema = new Schema(
   {
-    feeId: String,
+    feeID: String,
     feeCurrency: String,
     feeLocale: String,
     feeEntity: String,
