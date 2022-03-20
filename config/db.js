@@ -6,7 +6,7 @@ mongoose.connection.on("connected", function () {
 });
 
 mongoose.connection.on("error", function (err) {
-  console.log("DB conenction failed: " + err);
+  console.log("DB connection failed: " + err);
 });
 
 module.exports = mongoose;
