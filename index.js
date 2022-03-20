@@ -9,7 +9,7 @@ app.use(express.json());
 app.use("/", require("./routes/index.routes"));
 
 app.use((req, res, next) => {
-  res.status(404).json({ message: "Routes does not exist" });
+  res.status(404).json({ message: "Route does not exist" });
   next();
 });
 
