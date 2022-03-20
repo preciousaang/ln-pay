@@ -5,6 +5,7 @@ module.exports = {
       .notEmpty()
       .bail()
       .withMessage("Field is required")
+      .replace("\\n", "\n")
       .run(req);
 
     const errors = validationResult(req);
@@ -15,25 +16,6 @@ module.exports = {
     next();
   },
   computeFees: async (req, res, next) => {
-    //   "ID": 91203,
-    // "Amount": 5000,
-    // "Currency": "NGN",
-    // "CurrencyCountry": "NG",
-    // "Customer": {
-    //     "ID": 2211232,
-    //     "EmailAddress": "anonimized29900@anon.io",
-    //     "FullName": "Abel Eden",
-    //     "BearsFee": true
-    // },
-    // "PaymentEntity": {
-    //     "ID": 2203454,
-    //     "Issuer": "GTBANK",
-    //     "Brand": "MASTERCARD",
-    //     "Number": "530191******2903",
-    //     "SixID": 530191,
-    //     "Type": "CREDIT-CARD",
-    //     "Country": "NG"
-    // }
     await check("ID")
       .notEmpty()
       .bail()
@@ -126,9 +108,6 @@ module.exports = {
       .run(req);
 
     await check("PaymentEntity.Brand")
-      .notEmpty()
-      .bail()
-      .withMessage("Required Field")
       .isString()
       .bail()
       .withMessage("Must be a string")
@@ -147,9 +126,7 @@ module.exports = {
       .notEmpty()
       .bail()
       .withMessage("Required Field")
-      .isNumeric()
-      .bail()
-      .withMessage("Must be a number")
+
       .run(req);
     await check("PaymentEntity.Type")
       .notEmpty()

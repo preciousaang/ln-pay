@@ -5,17 +5,14 @@ let chai = require("chai");
 let server = require("../index");
 let chaiHttp = require("chai-http");
 const { expect } = require("chai");
-const Fee = require("../models/fees.model");
-
+const mongoose = require("mongoose");
 let should = chai.should();
 
 chai.use(chaiHttp);
 
-describe("/POST Fees", function () {
-  after((done) => {
-    Fee.deleteMany({}, function () {
-      done();
-    });
+describe("/POST Upload and compute fees", function () {
+  after(async () => {
+    await mongoose.connection.db.dropCollection("fees");
   });
   it("It should post the fees", function (done) {
     chai
@@ -34,9 +31,7 @@ describe("/POST Fees", function () {
         done();
       });
   });
-});
 
-describe("/POST compute-transaction-fee", function () {
   it("It should accept a single payload and give transacton fees", function (done) {
     chai
       .request(server)
@@ -66,10 +61,84 @@ describe("/POST compute-transaction-fee", function () {
         expect(err).to.be.null;
         res.should.have.status(200);
         res.body.should.be.a("object");
-        res.body.should.have.property("AppliedFeeID").eql("LNPY0222");
-        res.body.should.have.property("AppliedFeeValue").eql(230);
-        res.body.should.have.property("ChargeAmount").eql(5230);
+        res.body.should.have.property("AppliedFeeID").eql("LNPY1223");
+        res.body.should.have.property("AppliedFeeValue").eql(120);
+        res.body.should.have.property("ChargeAmount").eql(5120);
         res.body.should.have.property("SettlementAmount").eql(5000);
+        done();
+      });
+  });
+
+  it("It should accept a single payload and give transacton fees 2", function (done) {
+    chai
+      .request(server)
+      .post("/compute-transaction-fee")
+      .send({
+        ID: 91204,
+        Amount: 3500,
+        Currency: "NGN",
+        CurrencyCountry: "NG",
+        Customer: {
+          ID: 4211232,
+          EmailAddress: "anonimized292200@anon.io",
+          FullName: "Wenthorth Scoffield",
+          BearsFee: false,
+        },
+        PaymentEntity: {
+          ID: 2203454,
+          Issuer: "AIRTEL",
+          Brand: "",
+          Number: "080234******2903",
+          SixID: 080234,
+          Type: "USSD",
+          Country: "NG",
+        },
+      })
+      .end((err, res) => {
+        expect(err).to.be.null;
+        res.should.have.status(200);
+        res.body.should.be.a("object");
+        res.body.should.have.property("AppliedFeeID").eql("LNPY1221");
+        res.body.should.have.property("AppliedFeeValue").eql(49);
+        res.body.should.have.property("ChargeAmount").eql(3500);
+        res.body.should.have.property("SettlementAmount").eql(3451);
+        done();
+      });
+  });
+
+  it("It should accept a single payload and give error for no configuration", function (done) {
+    chai
+      .request(server)
+      .post("/compute-transaction-fee")
+      .send({
+        ID: 91204,
+        Amount: 3500,
+        Currency: "USD",
+        CurrencyCountry: "US",
+        Customer: {
+          ID: 4211232,
+          EmailAddress: "anonimized292200@anon.io",
+          FullName: "Wenthorth Scoffield",
+          BearsFee: false,
+        },
+        PaymentEntity: {
+          ID: 2203454,
+          Issuer: "WINTERFELLWALLETS",
+          Brand: "",
+          Number: "AX0923******0293",
+          SixID: "AX0923",
+          Type: "WALLET-ID",
+          Country: "NG",
+        },
+      })
+      .end((err, res) => {
+        expect(err).to.be.null;
+        res.should.have.status(400);
+        res.body.should.be.a("object");
+        res.body.should.have
+          .property("Error")
+          .eql("No fee configuration is applicable to this transaction.");
+
         done();
       });
   });

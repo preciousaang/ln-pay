@@ -6,7 +6,7 @@ router.post("/fees", validators.fees, feesController.uploadFees);
 router.post(
   "/compute-transaction-fee",
   validators.computeFees,
-  feesController.computeFees
+  feesController.computeFee
 );
 
 module.exports = router;
