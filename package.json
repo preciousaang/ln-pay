@@ -4,6 +4,7 @@
   "description": "Payment service for Lannister Tech",
   "main": "index.js",
   "scripts": {
+    "start": "set NODE_ENV=prod && node index.js",
     "test": "mocha --exit",
     "test:watch": "mocha --watch"
   },
