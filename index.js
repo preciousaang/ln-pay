@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
+const compression = require("compression");
 const app = express();
+app.use(compression());
 const PORT = process.env.PORT || 80;
 require("./config/db");
 app.use(express.urlencoded({ extended: false }));
